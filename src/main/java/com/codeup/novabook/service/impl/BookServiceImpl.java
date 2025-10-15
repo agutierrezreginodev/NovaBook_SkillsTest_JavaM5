@@ -5,7 +5,6 @@
 package com.codeup.novabook.service.impl;
 
 import com.codeup.novabook.domain.Book;
-import com.codeup.novabook.exceptions.book.BookNotFoundException;
 import com.codeup.novabook.exceptions.book.DuplicateISBNException;
 import com.codeup.novabook.exceptions.book.InvalidStockException;
 import com.codeup.novabook.repository.BookRepository;
