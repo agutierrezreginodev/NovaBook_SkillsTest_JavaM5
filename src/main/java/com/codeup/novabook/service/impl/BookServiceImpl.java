@@ -5,6 +5,9 @@
 package com.codeup.novabook.service.impl;
 
 import com.codeup.novabook.domain.Book;
+import com.codeup.novabook.exceptions.book.BookNotFoundException;
+import com.codeup.novabook.exceptions.book.DuplicateISBNException;
+import com.codeup.novabook.exceptions.book.InvalidStockException;
 import com.codeup.novabook.repository.BookRepository;
 import com.codeup.novabook.repository.jdbc.BookRepositoryJDBC;
 import com.codeup.novabook.service.BookService;
@@ -13,6 +16,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Service implementation for Book business logic operations.
@@ -34,20 +39,32 @@ public class BookServiceImpl implements BookService {
         this.bookRepository = new BookRepositoryJDBC();
     }
     
-    @Override
+    private static final Logger LOGGER = Logger.getLogger(BookServiceImpl.class.getName());
+    
     public Book addBook(Book book) {
-        validateBook(book);
-        
-        if (bookRepository.existsByIsbn(book.getIsbn())) {
-            throw new IllegalArgumentException("Book with ISBN " + book.getIsbn() + " already exists");
+        try {
+            validateBook(book);
+            
+            if (bookRepository.existsByIsbn(book.getIsbn())) {
+                throw new DuplicateISBNException(book.getIsbn());
+            }
+            
+            if (book.getStock() < 0) {
+                throw InvalidStockException.negativeStock(book.getStock());
+            }
+            
+            // Set timestamps
+            Instant now = Instant.now();
+            book.setCreatedAt(now);
+            book.setUpdatedAt(now);
+            
+            Book savedBook = bookRepository.save(book);
+            LOGGER.log(Level.INFO, "Book added successfully: {0}", book.getIsbn());
+            return savedBook;
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error adding book: " + e.getMessage(), e);
+            throw e;
         }
-        
-        // Set timestamps
-        Instant now = Instant.now();
-        book.setCreatedAt(now);
-        book.setUpdatedAt(now);
-        
-        return bookRepository.save(book);
     }
     
     @Override

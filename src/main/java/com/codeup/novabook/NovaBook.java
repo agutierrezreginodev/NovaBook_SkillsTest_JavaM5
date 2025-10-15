@@ -23,6 +23,9 @@ public class NovaBook {
      */
     public static void main(String[] args) {
         try {
+            // Initialize logging
+            com.codeup.novabook.utils.LoggerConfig.init();
+
             // Test database connection first
             System.out.println("Starting NovaBook Library Management System...");
             System.out.println("Testing database connection...");

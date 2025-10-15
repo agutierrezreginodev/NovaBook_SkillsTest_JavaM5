@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(120) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     phone VARCHAR(30) NOT NULL,
-    role ENUM('USER','ADMIN','MEMBER') NOT NULL DEFAULT 'USER',
+    role ENUM('USER','ADMIN','STAFF','MEMBER') NOT NULL DEFAULT 'USER',
     access_level ENUM('READ_ONLY','READ_WRITE', 'MANAGE') NOT NULL DEFAULT 'READ_WRITE',
     active BOOLEAN NOT NULL DEFAULT TRUE,
     deleted BOOLEAN NOT NULL DEFAULT FALSE,
@@ -61,29 +61,68 @@ CREATE TABLE IF NOT EXISTS lending (
     FOREIGN KEY (book_id) REFERENCES book(id)
 );
 
--- Insert default admin user (password: admin123)
-INSERT INTO users (name, email, password, phone, role, access_level, active, deleted, created_at, updated_at)
-VALUES ('Admin User', 'admin@novabook.com', 'admin123', '555-0000', 'ADMIN', 'MANAGE', TRUE, FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+-- Insert test users with BCrypt-hashed passwords
+-- Passwords are:
+-- admin@123 -> $2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewqhrPtR6sGdVL6m
+-- librarian@123 -> $2a$12$QOpvpqz7zIHrlzx5QY1OY.XWFSBExX9/g5vCQWoS0k4oKUfvc3.TO
+-- member@123 -> $2a$12$bVUBXkqxw0Y1RPXpygL5puL8/36HXJ1j9D3v7J/BT7LQYhXqgHX.C
+INSERT INTO users (name, email, password, phone, role, access_level, active, deleted, created_at, updated_at) VALUES 
+('System Admin', 'admin@novabook.com', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewqhrPtR6sGdVL6m', '555-0100', 'ADMIN', 'MANAGE', TRUE, FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Library Staff', 'librarian@novabook.com', '$2a$12$QOpvpqz7zIHrlzx5QY1OY.XWFSBExX9/g5vCQWoS0k4oKUfvc3.TO', '555-0101', 'STAFF', 'READ_WRITE', TRUE, FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('John Doe', 'john.doe@email.com', '$2a$12$bVUBXkqxw0Y1RPXpygL5puL8/36HXJ1j9D3v7J/BT7LQYhXqgHX.C', '555-0102', 'MEMBER', 'READ_ONLY', TRUE, FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Jane Smith', 'jane.smith@email.com', '$2a$12$bVUBXkqxw0Y1RPXpygL5puL8/36HXJ1j9D3v7J/BT7LQYhXqgHX.C', '555-0103', 'MEMBER', 'READ_ONLY', TRUE, FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Bob Wilson', 'bob.wilson@email.com', '$2a$12$bVUBXkqxw0Y1RPXpygL5puL8/36HXJ1j9D3v7J/BT7LQYhXqgHX.C', '555-0104', 'MEMBER', 'READ_ONLY', TRUE, FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
--- Insert some test members (password: pass123)
-INSERT INTO users (name, email, password, phone, role, access_level, active, deleted, created_at, updated_at)
-VALUES 
-    ('John Doe', 'john.doe@email.com', 'pass123', '555-0001', 'MEMBER', 'READ_WRITE', TRUE, FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('Jane Smith', 'jane.smith@email.com', 'pass123', '555-0002', 'MEMBER', 'READ_WRITE', TRUE, FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('Bob Wilson', 'bob.wilson@email.com', 'pass123', '555-0003', 'MEMBER', 'READ_WRITE', TRUE, FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
--- Insert corresponding member records
+-- Insert test members
 INSERT INTO member (name, active, deleted, role, access_level, created_at, updated_at)
 VALUES 
-    ('John Doe', TRUE, FALSE, 'REGULAR', 'READ_WRITE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('Jane Smith', TRUE, FALSE, 'PREMIUM', 'READ_WRITE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('Bob Wilson', TRUE, FALSE, 'REGULAR', 'READ_WRITE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+('John Doe', TRUE, FALSE, 'REGULAR', 'READ_ONLY', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Jane Smith', TRUE, FALSE, 'PREMIUM', 'READ_ONLY', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Bob Wilson', TRUE, FALSE, 'REGULAR', 'READ_ONLY', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
--- Insert some sample books
-INSERT INTO book (isbn, title, author, stock)
+-- Insert programming and technology books
+INSERT INTO book (isbn, title, author, stock, created_at, updated_at)
 VALUES 
-    ('978-0-7475-3269-9', 'Harry Potter and the Philosopher''s Stone', 'J.K. Rowling', 5),
-    ('978-0-06-112241-5', 'The Hobbit', 'J.R.R. Tolkien', 3),
-    ('978-0-385-47454-5', 'The Da Vinci Code', 'Dan Brown', 4),
-    ('978-0-7432-4722-1', 'Angels & Demons', 'Dan Brown', 2),
-    ('978-0-316-01202-8', 'Twilight', 'Stephenie Meyer', 3);
+('978-0134685991', 'Effective Java', 'Joshua Bloch', 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('978-0596009205', 'Head First Java', 'Kathy Sierra', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('978-0134757599', 'Core Java Volume I', 'Cay S. Horstmann', 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('978-0596007126', 'Head First Design Patterns', 'Eric Freeman', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('978-0321349606', 'Java Concurrency in Practice', 'Brian Goetz', 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('978-0596516680', 'Database Design Patterns', 'Michael Ross', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('978-0137673629', 'Core Python Programming', 'Wesley Chun', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Insert test lendings with different scenarios
+-- Current loans
+INSERT INTO lending (member_id, book_id, lending_date, due_date, returned, created_at, updated_at)
+VALUES
+(1, 1, CURRENT_DATE, DATE_ADD(CURRENT_DATE, INTERVAL 14 DAY), FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 2, CURRENT_DATE, DATE_ADD(CURRENT_DATE, INTERVAL 14 DAY), FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Overdue loans (20 days ago, due 14 days ago)
+INSERT INTO lending (member_id, book_id, lending_date, due_date, returned, created_at, updated_at)
+VALUES
+(1, 3, DATE_SUB(CURRENT_DATE, INTERVAL 20 DAY), DATE_SUB(CURRENT_DATE, INTERVAL 6 DAY), FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 4, DATE_SUB(CURRENT_DATE, INTERVAL 20 DAY), DATE_SUB(CURRENT_DATE, INTERVAL 6 DAY), FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Returned loans
+INSERT INTO lending (member_id, book_id, lending_date, due_date, returned, created_at, updated_at)
+VALUES
+(2, 5, DATE_SUB(CURRENT_DATE, INTERVAL 10 DAY), DATE_ADD(CURRENT_DATE, INTERVAL 4 DAY), TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 6, DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY), DATE_ADD(CURRENT_DATE, INTERVAL 7 DAY), TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Display test account credentials for reference
+SELECT '=== Test Account Credentials ===' as '';
+SELECT 'Role' as 'Role', 'Email' as 'Email', 'Password' as 'Plain Password' UNION ALL
+SELECT 'ADMIN', 'admin@novabook.com', 'admin@123' UNION ALL
+SELECT 'STAFF', 'librarian@novabook.com', 'librarian@123' UNION ALL
+SELECT 'MEMBER', 'john.doe@email.com', 'member@123' UNION ALL
+SELECT 'MEMBER', 'jane.smith@email.com', 'member@123' UNION ALL
+SELECT 'MEMBER', 'bob.wilson@email.com', 'member@123';
+
+-- Display data summary
+SELECT '=== Test Data Summary ===' as '';
+SELECT 'Books Available:', COUNT(*) FROM book;
+SELECT 'Active Members:', COUNT(*) FROM member WHERE active = TRUE;
+SELECT 'Current Loans:', COUNT(*) FROM lending WHERE returned = FALSE;
+SELECT 'Overdue Loans:', COUNT(*) FROM lending WHERE returned = FALSE AND due_date < CURRENT_DATE;
+SELECT 'Returned Loans:', COUNT(*) FROM lending WHERE returned = TRUE;

@@ -8,7 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import com.codeup.novabook.exceptions.DatabaseException;
+import com.codeup.novabook.exceptions.db.DatabaseException;
 import com.codeup.novabook.infra.config.AppConfig;
 
 /**
