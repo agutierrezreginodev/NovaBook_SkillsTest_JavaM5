@@ -32,7 +32,8 @@ class MemberServiceImplTest {
     @BeforeEach
     void setUp() {
         Instant now = Instant.now();
-        testMember = new Member(1, "Test Member", true, false, "REGULAR", "USER", now, now);
+        // use accessLevel READ_WRITE to satisfy MemberServiceImpl.validateMember
+        testMember = new Member(1, "Test Member", true, false, "REGULAR", "READ_WRITE", now, now);
     }
 
     @Test
@@ -52,7 +53,10 @@ class MemberServiceImplTest {
     @Test
     void registerMember_WithNullName_ShouldThrowIllegalArgumentException() {
         // Arrange
-        testMember = new Member(1, null, true, false, "REGULAR", "USER", Instant.now(), Instant.now());
+        // The Member constructor prevents creating a member with null name, so
+        // create a valid instance then set the name to null to simulate invalid input
+        testMember = new Member(1, "Valid Name", true, false, "REGULAR", "READ_WRITE", Instant.now(), Instant.now());
+        testMember.setName(null);
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> memberService.registerMember(testMember));
@@ -62,7 +66,9 @@ class MemberServiceImplTest {
     @Test
     void registerMember_WithInvalidRole_ShouldThrowIllegalArgumentException() {
         // Arrange
-        testMember = new Member(1, "Test Member", true, false, "INVALID_ROLE", "USER", Instant.now(), Instant.now());
+        // The constructor enforces a valid role, so create valid then set invalid
+        testMember = new Member(1, "Test Member", true, false, "REGULAR", "READ_WRITE", Instant.now(), Instant.now());
+        testMember.setRole("INVALID_ROLE");
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> memberService.registerMember(testMember));
@@ -93,7 +99,7 @@ class MemberServiceImplTest {
     void updateMember_WithValidMember_ShouldUpdateAndReturnMember() {
         // Arrange
         when(memberRepository.findById(1)).thenReturn(Optional.of(testMember));
-        when(memberRepository.save(any(Member.class))).thenReturn(testMember);
+        when(memberRepository.update(any(Member.class))).thenReturn(testMember);
 
         testMember.setName("Updated Name");
 
@@ -103,7 +109,7 @@ class MemberServiceImplTest {
         // Assert
         assertNotNull(result);
         assertEquals("Updated Name", result.getName());
-        verify(memberRepository).save(any(Member.class));
+        verify(memberRepository).update(any(Member.class));
     }
 
     @Test
@@ -112,11 +118,9 @@ class MemberServiceImplTest {
         when(memberRepository.findById(anyInt())).thenReturn(Optional.empty());
 
         // Act
-        Member result = memberService.updateMember(testMember);
-
-        // Assert
-        assertNull(result);
-        verify(memberRepository, never()).save(any());
+        // Act & Assert: service throws when member does not exist
+        assertThrows(IllegalArgumentException.class, () -> memberService.updateMember(testMember));
+        verify(memberRepository, never()).update(any());
     }
 
     @Test

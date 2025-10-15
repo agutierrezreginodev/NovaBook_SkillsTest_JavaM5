@@ -33,6 +33,13 @@ public class LendingServiceImpl implements LendingService {
         this.lendingRepository = new LendingRepositoryJDBC();
     }
 
+    /**
+     * Constructor for injecting a LendingRepository (useful for tests)
+     */
+    public LendingServiceImpl(LendingRepository lendingRepository) {
+        this.lendingRepository = lendingRepository;
+    }
+
     @Override
     public Lending lendBook(int memberId, int bookId, int lendingDays) {
         if (memberId <= 0) {

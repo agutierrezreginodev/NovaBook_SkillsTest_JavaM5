@@ -29,6 +29,13 @@ public class MemberServiceImpl implements MemberService {
     public MemberServiceImpl() {
         this.memberRepository = new MemberRepositoryJDBC();
     }
+
+    /**
+     * Constructor for injecting a MemberRepository (useful for tests)
+     */
+    public MemberServiceImpl(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
     
     /**
      * Validates a member's data before saving or updating

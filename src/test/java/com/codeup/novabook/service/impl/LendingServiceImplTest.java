@@ -12,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,7 +42,8 @@ class LendingServiceImplTest {
         int memberId = 1;
         int bookId = 1;
         int lendingDays = 14;
-        when(lendingRepository.findByMemberId(memberId)).thenReturn(Arrays.asList());
+        when(lendingRepository.countByMemberId(memberId)).thenReturn(0L);
+        when(lendingRepository.findByBookId(bookId)).thenReturn(Arrays.asList());
         when(lendingRepository.save(any(Lending.class))).thenReturn(testLending);
 
         // Act
@@ -75,12 +75,7 @@ class LendingServiceImplTest {
     @Test
     void lendBook_WhenMemberReachedMaxBooks_ShouldThrowIllegalArgumentException() {
         // Arrange
-        List<Lending> activeLoans = Arrays.asList(
-            testLending,
-            new Lending(2, 1, 2, Instant.now(), Instant.now().plus(14, ChronoUnit.DAYS), false, Instant.now(), Instant.now()),
-            new Lending(3, 1, 3, Instant.now(), Instant.now().plus(14, ChronoUnit.DAYS), false, Instant.now(), Instant.now())
-        );
-        when(lendingRepository.findByMemberId(1)).thenReturn(activeLoans);
+        when(lendingRepository.countByMemberId(1)).thenReturn(3L);
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, 
@@ -105,27 +100,26 @@ class LendingServiceImplTest {
     void returnBook_WithValidLendingId_ShouldReturnTrue() {
         // Arrange
         int lendingId = 1;
-        when(lendingRepository.findById(lendingId)).thenReturn(Optional.of(testLending));
-        when(lendingRepository.save(any(Lending.class))).thenReturn(testLending);
+        when(lendingRepository.markAsReturned(lendingId)).thenReturn(true);
 
         // Act
         boolean result = lendingService.returnBook(lendingId);
 
         // Assert
         assertTrue(result);
-        verify(lendingRepository).save(any(Lending.class));
+        verify(lendingRepository).markAsReturned(lendingId);
     }
 
     @Test
     void returnBook_WithInvalidLendingId_ShouldReturnFalse() {
         // Arrange
-        when(lendingRepository.findById(anyInt())).thenReturn(Optional.empty());
+        when(lendingRepository.markAsReturned(anyInt())).thenReturn(false);
 
         // Act
         boolean result = lendingService.returnBook(1);
 
         // Assert
         assertFalse(result);
-        verify(lendingRepository, never()).save(any());
+        verify(lendingRepository).markAsReturned(1);
     }
 }

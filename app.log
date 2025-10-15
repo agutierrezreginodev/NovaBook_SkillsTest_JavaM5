@@ -54,3 +54,7 @@ oct 15, 2025 1:48:34 P. M. com.codeup.novabook.service.impl.BookServiceImpl add
 INFO: Book added successfully: 6599999999990
 oct. 15, 2025 4:05:55 P. M. com.codeup.novabook.utils.LoggerConfig init
 INFORMACIÓN: Logging system initialized
+oct. 15, 2025 5:08:24 P. M. com.codeup.novabook.utils.LoggerConfig init
+INFORMACIÓN: Logging system initialized
+oct 15, 2025 5:18:09 P. M. com.codeup.novabook.utils.LoggerConfig init
+INFO: Logging system initialized
