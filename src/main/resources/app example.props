@@ -1,0 +1,12 @@
+# Properties template for the application
+db.vendor= <database_type>
+db.host= <database_host>
+db.port= <database_port>
+db.name= <database_name>
+db.user= <database_user>
+db.password= <database_password>
+db.useSSL= <true/false>
+db.url=jdbc: <database_type>://${db.host}:${db.port}/${db.name}?useSSL=${db.useSSL}
+
+pool.enabled= <true/false>
+pool.maxPoolSize= <max_pool_size>
