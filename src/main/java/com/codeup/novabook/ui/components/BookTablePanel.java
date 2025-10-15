@@ -19,8 +19,8 @@ public class BookTablePanel extends JPanel {
             BorderFactory.createEmptyBorder(5, 5, 5, 5)
         ));
         
-        // Initialize table
-        String[] columns = {"ISBN", "Título", "Autor", "Stock"};
+        // Initialize table (include hidden ID column as first column)
+        String[] columns = {"ID", "ISBN", "Título", "Autor", "Stock"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -30,6 +30,12 @@ public class BookTablePanel extends JPanel {
         
         tblBooks = new JTable(tableModel);
         tblBooks.getTableHeader().setReorderingAllowed(false);
+
+    // Hide ID column from view but keep it in the model so we can retrieve the book id
+    tblBooks.getColumnModel().getColumn(0).setMinWidth(0);
+    tblBooks.getColumnModel().getColumn(0).setMaxWidth(0);
+    tblBooks.getColumnModel().getColumn(0).setWidth(0);
+    tblBooks.getColumnModel().getColumn(0).setPreferredWidth(0);
         
         // Add table to scroll pane
         JScrollPane scrollPane = new JScrollPane(tblBooks);
@@ -58,6 +64,7 @@ public class BookTablePanel extends JPanel {
             
             for (Book book : books) {
                 Object[] row = {
+                    book.getId(),
                     book.getIsbn(),
                     book.getTitle(),
                     book.getAuthor(),
@@ -81,13 +88,19 @@ public class BookTablePanel extends JPanel {
         }
         
         return new Book(
-            0, // ID not available in table
-            tableModel.getValueAt(selectedRow, 0).toString(), // ISBN
-            tableModel.getValueAt(selectedRow, 1).toString(), // Title
-            tableModel.getValueAt(selectedRow, 2).toString(), // Author
-            Integer.parseInt(tableModel.getValueAt(selectedRow, 3).toString()), // Stock
+            Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString()), // ID
+            tableModel.getValueAt(selectedRow, 1).toString(), // ISBN
+            tableModel.getValueAt(selectedRow, 2).toString(), // Title
+            tableModel.getValueAt(selectedRow, 3).toString(), // Author
+            Integer.parseInt(tableModel.getValueAt(selectedRow, 4).toString()), // Stock
             null, // Created at not available in table
             null  // Updated at not available in table
         );
+    }
+
+    public int getSelectedBookId() {
+        int selectedRow = tblBooks.getSelectedRow();
+        if (selectedRow < 0) return -1;
+        return Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
     }
 }

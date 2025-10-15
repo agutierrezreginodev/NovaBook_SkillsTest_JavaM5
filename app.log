@@ -6,3 +6,45 @@ oct. 14, 2025 6:34:17 P. M. com.codeup.novabook.utils.LoggerConfig init
 INFORMACIÓN: Logging system initialized
 oct. 14, 2025 6:34:32 P. M. com.codeup.novabook.utils.CsvExporter exportBooksToCsv
 INFORMACIÓN: Successfully exported 5 books to libros_export.csv
+oct. 14, 2025 7:56:59 P. M. com.codeup.novabook.utils.LoggerConfig init
+INFORMACIÓN: Logging system initialized
+oct 15, 2025 1:11:18 P. M. com.codeup.novabook.utils.LoggerConfig init
+INFO: Logging system initialized
+oct 15, 2025 1:23:03 P. M. com.codeup.novabook.utils.LoggerConfig init
+INFO: Logging system initialized
+oct. 15, 2025 1:25:53 P. M. com.codeup.novabook.utils.LoggerConfig init
+INFORMACIÓN: Logging system initialized
+oct. 15, 2025 1:26:24 P. M. com.codeup.novabook.utils.LoggerConfig init
+INFORMACIÓN: Logging system initialized
+oct 15, 2025 1:27:48 P. M. com.codeup.novabook.utils.LoggerConfig init
+INFO: Logging system initialized
+oct. 15, 2025 1:33:40 P. M. com.codeup.novabook.utils.LoggerConfig init
+INFORMACIÓN: Logging system initialized
+oct. 15, 2025 1:34:27 P. M. com.codeup.novabook.utils.LoggerConfig init
+INFORMACIÓN: Logging system initialized
+oct. 15, 2025 1:37:03 P. M. com.codeup.novabook.utils.CsvExporter exportBooksToCsv
+INFORMACIÓN: Successfully exported 7 books to libros_export.csv
+oct. 15, 2025 1:37:09 P. M. com.codeup.novabook.utils.CsvExporter exportOverdueLendingsToCsv
+INFORMACIÓN: Successfully exported 2 overdue lendings to prestamos_vencidos.csv
+oct. 15, 2025 1:38:36 P. M. com.codeup.novabook.service.impl.BookServiceImpl addBook
+GRAVE: Error adding book: Invalid ISBN format
+java.lang.IllegalArgumentException: Invalid ISBN format
+	at com.codeup.novabook.service.impl.BookServiceImpl.validateBook(BookServiceImpl.java:233)
+	at com.codeup.novabook.service.impl.BookServiceImpl.addBook(BookServiceImpl.java:45)
+	at com.codeup.novabook.ui.NovaBookUI.addBook(NovaBookUI.java:1091)
+	at com.codeup.novabook.ui.NovaBookUI.showBookManagementMenu(NovaBookUI.java:825)
+	at com.codeup.novabook.ui.NovaBookUI.showMainMenu(NovaBookUI.java:536)
+	at com.codeup.novabook.ui.NovaBookUI.start(NovaBookUI.java:74)
+	at com.codeup.novabook.NovaBook.main(NovaBook.java:49)
+
+oct. 15, 2025 1:40:43 P. M. com.codeup.novabook.service.impl.BookServiceImpl addBook
+GRAVE: Error adding book: Invalid ISBN format
+java.lang.IllegalArgumentException: Invalid ISBN format
+	at com.codeup.novabook.service.impl.BookServiceImpl.validateBook(BookServiceImpl.java:233)
+	at com.codeup.novabook.service.impl.BookServiceImpl.addBook(BookServiceImpl.java:45)
+	at com.codeup.novabook.ui.NovaBookUI.addBook(NovaBookUI.java:1091)
+	at com.codeup.novabook.ui.NovaBookUI.showBookManagementMenu(NovaBookUI.java:825)
+	at com.codeup.novabook.ui.NovaBookUI.showMainMenu(NovaBookUI.java:536)
+	at com.codeup.novabook.ui.NovaBookUI.start(NovaBookUI.java:74)
+	at com.codeup.novabook.NovaBook.main(NovaBook.java:49)
+

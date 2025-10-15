@@ -27,9 +27,14 @@ import java.util.logging.Logger;
 public class BookServiceImpl implements BookService {
     
     private final BookRepository bookRepository;
+    // Keep the original complex pattern as a fallback, but prefer normalized checks
     private static final Pattern ISBN_PATTERN = Pattern.compile(
         "^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})[- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$"
     );
+
+    // Simple normalized patterns for ISBN-10 and ISBN-13
+    private static final Pattern NORMALIZED_ISBN10 = Pattern.compile("^[0-9]{9}[0-9X]$");
+    private static final Pattern NORMALIZED_ISBN13 = Pattern.compile("^[0-9]{13}$");
     
     /**
      * Constructor that initializes the book repository.
@@ -196,7 +201,41 @@ public class BookServiceImpl implements BookService {
         if (isbn == null || isbn.trim().isEmpty()) {
             return false;
         }
+
+        // Normalize ISBN by removing common prefixes and non-alphanumeric characters
+        String normalized = normalizeIsbn(isbn);
+        if (normalized == null || normalized.isEmpty()) {
+            return false;
+        }
+
+        // Check normalized patterns: ISBN-10 or ISBN-13
+        if (NORMALIZED_ISBN13.matcher(normalized).matches()) {
+            return true;
+        }
+
+        if (NORMALIZED_ISBN10.matcher(normalized).matches()) {
+            return true;
+        }
+
+        // Fallback to original pattern (accepts formatted ISBNs)
         return ISBN_PATTERN.matcher(isbn.trim()).matches();
+    }
+
+    /**
+     * Normalize ISBN string: remove leading 'ISBN' or 'ISBN-13:' prefixes, strip hyphens and spaces
+     * and uppercase any trailing 'x'.
+     */
+    private String normalizeIsbn(String isbn) {
+        if (isbn == null) return null;
+        String s = isbn.trim().toUpperCase();
+
+        // Remove common prefix like "ISBN", "ISBN-13:", "ISBN-10:"
+        s = s.replaceAll("^ISBN(?:-1[03])?:?\\s*", "");
+
+        // Remove all non-alphanumeric characters (keep digits and 'X')
+        s = s.replaceAll("[^0-9X]", "");
+
+        return s;
     }
     
     @Override
@@ -228,8 +267,16 @@ public class BookServiceImpl implements BookService {
         if (book.getIsbn() == null || book.getIsbn().trim().isEmpty()) {
             throw new IllegalArgumentException("Book ISBN cannot be null or empty");
         }
-        
-        if (!isValidIsbn(book.getIsbn())) {
+
+        // Normalize ISBN and set it back on the book for consistent storage
+        String normalized = normalizeIsbn(book.getIsbn());
+        if (normalized == null || normalized.isEmpty()) {
+            throw new IllegalArgumentException("Invalid ISBN format");
+        }
+        // Set normalized ISBN (store canonical form without hyphens/spaces)
+        book.setIsbn(normalized);
+
+        if (!isValidIsbn(normalized)) {
             throw new IllegalArgumentException("Invalid ISBN format");
         }
         

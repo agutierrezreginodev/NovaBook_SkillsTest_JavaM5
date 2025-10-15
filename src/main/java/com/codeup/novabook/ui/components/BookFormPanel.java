@@ -22,7 +22,7 @@ public class BookFormPanel extends JPanel {
         txtTitle = new JTextField();
         txtAuthor = new JTextField();
         txtStock = new JTextField();
-        btnAdd = new JButton("Agregar Libro");
+    btnAdd = new JButton("Agregar Libro");
         
         // Add components
         add(new JLabel("ISBN:"));
@@ -63,5 +63,16 @@ public class BookFormPanel extends JPanel {
         txtAuthor.setText("");
         txtStock.setText("");
         txtIsbn.requestFocus();
+    }
+
+    public void setFormValues(String isbn, String title, String author, int stock) {
+        txtIsbn.setText(isbn == null ? "" : isbn);
+        txtTitle.setText(title == null ? "" : title);
+        txtAuthor.setText(author == null ? "" : author);
+        txtStock.setText(String.valueOf(stock));
+    }
+
+    public void setButtonText(String text) {
+        btnAdd.setText(text);
     }
 }
