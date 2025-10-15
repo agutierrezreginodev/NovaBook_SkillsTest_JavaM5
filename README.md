@@ -11,6 +11,42 @@ Implements JDBC repositories with a Singleton connection manager, secure passwor
 - **Lending System**: Borrow, return, and track book loans
 - **Member Management**: Registration and profile management
 - **Admin Features**: System configuration and advanced management options
+- **Comprehensive Testing**: JUnit 5 test suite with Mockito for service layer testing
+
+### Testing Infrastructure
+
+The project includes comprehensive unit tests for the service layer using JUnit 5 and Mockito:
+
+#### Service Layer Tests
+- **BookServiceImplTest**: Tests for book management operations
+  - Book addition with ISBN validation
+  - Duplicate ISBN checks
+  - Stock management validation
+  - Book search functionality
+
+- **LendingServiceImplTest**: Tests for lending operations
+  - Book lending process
+  - Return book functionality
+  - Lending limits enforcement
+  - Due date management
+
+- **MemberServiceImplTest**: Tests for member management
+  - Member registration
+  - Role validation
+  - Member search functionality
+  - Active/inactive member management
+
+#### Test Coverage
+- Service layer business logic
+- Input validation
+- Error handling
+- Business rules enforcement
+- Edge cases
+
+#### Testing Tools
+- JUnit 5 for test framework
+- Mockito for dependency mocking
+- AssertJ for fluent assertions
 
 ---
 
@@ -95,7 +131,23 @@ db.password=Qwe.123*
 db.useSSL=false
 ```
 
-### 3. Build and Run
+### 3. Run Tests
+
+The project includes a comprehensive test suite. You can run the tests using Maven:
+
+```bash
+# Run all tests
+mvn test
+
+# Run specific test class
+mvn test -Dtest=BookServiceImplTest
+mvn test -Dtest=LendingServiceImplTest
+mvn test -Dtest=MemberServiceImplTest
+```
+
+Test results will be available in the `target/surefire-reports` directory.
+
+### 4. Build and Run
 
 #### Using Maven:
 ```bash
@@ -170,7 +222,12 @@ java -cp "target/classes:lib/*" com.codeup.novabook.NovaBook
 - `ConnectionFactory` ensures only one database connection instance
 - Thread-safe implementation with double-checked locking
 
-### 3. Repository Pattern
+### 3. Mock Objects Pattern (Testing)
+- Using Mockito for dependency injection in tests
+- Isolation of system under test
+- Controlled testing environment
+
+### 4. Repository Pattern
 - Abstracts data access operations
 - Easy to switch between different data sources
 - Clean separation of concerns
