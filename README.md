@@ -119,7 +119,7 @@ USE novabook_db;
 
 ### 2. Configuration
 
-Configure the database connection in `src/main/resources/app.props`:
+Configure the database connection in `src/main/resources/application.properties`:
 
 ```properties
 db.vendor=mysql

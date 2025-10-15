@@ -16,7 +16,7 @@ public class AppConfig {
     private final Properties props = new Properties();
 
     public AppConfig() {
-        try (InputStream in = getClass().getResourceAsStream("/app.props")) {
+        try (InputStream in = getClass().getResourceAsStream("/application.properties")) {
             if (in == null) {
                 throw new IllegalStateException("application.properties not found");
             }

@@ -50,12 +50,12 @@ public class NovaBook {
 
             } else {
                 System.err.println("✗ Database connection failed!");
-                JOptionPane.showMessageDialog(null,
-                        "Database connection failed!\n\n" +
-                                "Please check your database configuration in app.props file.\n" +
-                                "Make sure MySQL is running and the database 'novabook_db' exists.",
-                        "Connection Error",
-                        JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null,
+            "Database connection failed!\n\n" +
+                "Please check your database configuration in application.properties file.\n" +
+                "Make sure MySQL is running and the database 'novabook_db' exists.",
+            "Connection Error",
+            JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (Exception e) {

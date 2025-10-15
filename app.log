@@ -48,3 +48,9 @@ java.lang.IllegalArgumentException: Invalid ISBN format
 	at com.codeup.novabook.ui.NovaBookUI.start(NovaBookUI.java:74)
 	at com.codeup.novabook.NovaBook.main(NovaBook.java:49)
 
+oct 15, 2025 1:46:00 P. M. com.codeup.novabook.utils.LoggerConfig init
+INFO: Logging system initialized
+oct 15, 2025 1:48:34 P. M. com.codeup.novabook.service.impl.BookServiceImpl addBook
+INFO: Book added successfully: 6599999999990
+oct. 15, 2025 4:05:55 P. M. com.codeup.novabook.utils.LoggerConfig init
+INFORMACIÓN: Logging system initialized
