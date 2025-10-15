@@ -6,7 +6,7 @@ package com.codeup.novabook.repository.jdbc;
 
 import com.codeup.novabook.connection.ConnectionFactory;
 import com.codeup.novabook.domain.Lending;
-import com.codeup.novabook.exceptions.DatabaseException;
+import com.codeup.novabook.exceptions.db.DatabaseException;
 import com.codeup.novabook.repository.LendingRepository;
 
 import java.sql.*;
