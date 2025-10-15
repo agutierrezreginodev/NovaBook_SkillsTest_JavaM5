@@ -99,6 +99,31 @@ public class Lending {
     }
 
     /**
+     * Gets the lending date
+     * 
+     * @return the lending date
+     */
+    public Instant getLendDate() {
+        return lendingDate;
+    }
+
+    /**
+     * Calculates the number of days this lending is overdue
+     * 
+     * @return number of days overdue, or 0 if not overdue
+     */
+    public long getDaysOverdue() {
+        if (returned) {
+            return 0;
+        }
+        Instant now = Instant.now();
+        if (now.isAfter(dueDate)) {
+            return java.time.Duration.between(dueDate, now).toDays();
+        }
+        return 0;
+    }
+
+    /**
      * Getter for the lending date of the lending
      * 
      * @return lending date of the lending

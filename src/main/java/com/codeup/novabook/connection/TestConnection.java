@@ -4,10 +4,10 @@
  */
 package com.codeup.novabook.connection;
 
-import com.codeup.novabook.exceptions.DatabaseException;
-
 import java.sql.Connection;
 import java.sql.SQLException;
+
+import com.codeup.novabook.exceptions.db.DatabaseException;
 
 /**
  *

@@ -1,0 +1,8 @@
+oct. 14, 2025 6:31:04 P. M. com.codeup.novabook.utils.LoggerConfig init
+INFORMACIÓN: Logging system initialized
+oct. 14, 2025 6:32:23 P. M. com.codeup.novabook.utils.LoggerConfig init
+INFORMACIÓN: Logging system initialized
+oct. 14, 2025 6:34:17 P. M. com.codeup.novabook.utils.LoggerConfig init
+INFORMACIÓN: Logging system initialized
+oct. 14, 2025 6:34:32 P. M. com.codeup.novabook.utils.CsvExporter exportBooksToCsv
+INFORMACIÓN: Successfully exported 5 books to libros_export.csv
